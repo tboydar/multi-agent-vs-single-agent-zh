@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>參考資料｜多代理 vs 單代理</title>
+<meta name="description" content="多代理 vs 單代理深度研究的全部參考來源、連結與證據等級（A/B/C）。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">多單</span>
+    <span><span class="brand-name">多代理 vs 單代理</span><span class="brand-sub">RESEARCH DOSSIER · 2110116906581848217</span></span>
+  </a>
+  <nav class="site-nav">
+    <a href="index.html">首頁</a>
+    <a href="evidence.html">證據盤點</a>
+    <a href="coordination-cost.html">協調成本</a>
+    <a href="decision-framework.html">決策框架</a>
+    <a href="templates.html">範本</a>
+    <a href="references.html" aria-current="page">參考資料</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="pagehead">
+    <span class="kicker">§ 05 · REFERENCES</span>
+    <h1>參考資料</h1>
+    <p>證據等級：<span class="grade gA">A</span>＝有控制變因的對照實驗／學術評測 · <span class="grade gB">B</span>＝生產系統內部評測 · <span class="grade gC">C</span>＝案例、觀點、實務經驗。</p>
+  </div>
+
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">R0</span><h2>原始討論</h2></div>
+    <div class="ev">
+      <div class="no" style="color:var(--multi)">✕</div>
+      <div>
+        <h4>Martin (@cantcomputer)，X 貼文 #2110116906581848217 <span class="src">2026-10-13 · <span class="grade gC">C</span></span></h4>
+        <p><a href="https://x.com/i/web/status/2110116906581848217">x.com/i/web/status/2110116906581848217</a> — 徵求「agent swarm 做得到、單 agent 做不到」的案例（討論題，67 則回覆）。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">R+</span><h2>支持多代理的證據</h2></div>
+
+    <div class="ev pro">
+      <div class="no">02</div>
+      <div>
+        <h4>How we built our multi-agent research system<span class="src">Anthropic Engineering · 2025-06 · <span class="grade gB">B</span></span></h4>
+        <p><a href="https://www.anthropic.com/engineering/multi-agent-research-system">anthropic.com/engineering/multi-agent-research-system</a></p>
+        <p class="takeaway">+90.2% 內部評測；15× token；同步瓶頸與「多數 coding 不適合」警語。</p>
+      </div>
+    </div>
+
+    <div class="ev pro">
+      <div class="no">03</div>
+      <div>
+        <h4>Capable language models can outgrow the benefits of collaboration<span class="src">Nature Machine Intelligence · 2026 · <span class="grade gA">A</span></span></h4>
+        <p><a href="https://www.nature.com/articles/s42256-026-01268-y">nature.com/articles/s42256-026-01268-y</a></p>
+        <p class="takeaway">跨領域對照：Finance +57~+81%、PlanCraft −39~−70%；協調通訊量超線性成長。</p>
+      </div>
+    </div>
+
+    <div class="ev pro">
+      <div class="no">04</div>
+      <div>
+        <h4>More Agents Is All You Need<span class="src">TMLR 2024 · <span class="grade gA">A</span></span></h4>
+        <p><a href="https://openreview.net/forum?id=bgzUSZ8aeg">openreview.net/forum?id=bgzUSZ8aeg</a></p>
+        <p class="takeaway">抽樣式（best-of-n）提升；與「協作式分工」不同，勿混用。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">R−</span><h2>質疑多代理的證據</h2></div>
+
+    <div class="ev con">
+      <div class="no">05</div>
+      <div>
+        <h4>Single-Agent LLMs Outperform Multi-Agent Systems on Multi-Hop Reasoning Under Equal Thinking Token Budgets<span class="src">arXiv 2604.02460 · <span class="grade gA">A</span></span></h4>
+        <p><a href="https://arxiv.org/abs/2604.02460">arxiv.org/abs/2604.02460</a></p>
+        <p class="takeaway">同 token 預算下單代理追平或勝出；多代理優勢常來自未記帳的額外運算。</p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">06</div>
+      <div>
+        <h4>Should we be going MAD? A Look at Multi-Agent Debate Strategies for LLMs<span class="src">arXiv 2311.17371 · <span class="grade gA">A</span></span></h4>
+        <p><a href="https://arxiv.org/abs/2311.17371">arxiv.org/abs/2311.17371</a></p>
+        <p class="takeaway">多代理辯論無法可靠勝過 self-consistency / ensembling。</p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">07</div>
+      <div>
+        <h4>Why Do Multi-Agent LLM Systems Fail?（MAST）<span class="src">NeurIPS 2025 · arXiv 2503.13657 · <span class="grade gA">A</span></span></h4>
+        <p><a href="https://arxiv.org/abs/2503.13657">arxiv.org/abs/2503.13657</a></p>
+        <p class="takeaway">1600+ 軌跡、14 種失敗模式、3 大類；MAS 在熱門基準上的提升通常很小。</p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">08</div>
+      <div>
+        <h4>Single-agent or Multi-agent Systems? Why Not Both?<span class="src">arXiv 2505.18286 · Gao et al. 2025 · <span class="grade gA">A</span></span></h4>
+        <p><a href="https://arxiv.org/abs/2505.18286">arxiv.org/abs/2505.18286</a></p>
+        <p class="takeaway">MAS 收益隨模型能力提升而遞減；hybrid 級聯 +1.1~12% 準確率、−20% 成本。</p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">09</div>
+      <div>
+        <h4>Don't Build Multi-Agents<span class="src">Cognition (Devin) · 2025-06 · <span class="grade gC">C</span></span></h4>
+        <p><a href="https://cognition.ai/blog/dont-build-multi-agents">cognition.ai/blog/dont-build-multi-agents</a></p>
+        <p class="takeaway">上下文割裂論：共享 context 是長程 agent 可靠性的核心。</p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">10</div>
+      <div>
+        <h4>Don't Sleep on Single-agent Systems<span class="src">OpenHands / Graham Neubig · 2024-09 · <span class="grade gC">C</span></span></h4>
+        <p><a href="https://openhands.dev/blog/dont-sleep-on-single-agent-systems">openhands.dev/blog/dont-sleep-on-single-agent-systems</a></p>
+        <p class="takeaway">把一個 agent 變強，優於養一群弱 agent。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">R↗</span><h2>方法論與延伸閱讀</h2></div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>來源</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://www.anthropic.com/engineering/building-effective-agents">Anthropic · Building effective agents</a></td><td>先用最簡單的形狀（workflow 優於 agent），需要時再升級</td></tr>
+          <tr><td><a href="https://arxiv.org/abs/2504.12516">BrowseComp（OpenAI / arXiv 2504.12516）</a></td><td>瀏覽型搜尋基準；token 用量對表現解釋力的分析基礎</td></tr>
+          <tr><td><a href="https://arxiv.org/abs/2503.01935">MultiAgentBench · ACL 2025</a></td><td>多 agent 協作與競爭的評測框架</td></tr>
+          <tr><td><a href="https://github.com/tboydar/multi-agent-vs-single-agent-zh">本專案 GitHub Repo</a></td><td>Markdown 學習資料（docs/）與網站原始碼</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <span class="tag">引用提醒</span>
+      <p>本站是對上述來源的<strong>二手整理與教學改寫</strong>，結論以原始論文為準。原貼文本質是討論題——引用時請標明「討論中」而非「已證實」。</p>
+    </div>
+  </section>
+
+  <div class="prevnext">
+    <a href="templates.html">← 範本</a>
+    <a href="index.html">回到首頁 →</a>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <span>MULTI-AGENT VS SINGLE-AGENT · 繁體中文深度研究</span>
+  <span><a href="https://github.com/tboydar/multi-agent-vs-single-agent-zh">GitHub Repo</a> · MIT License</span>
+</footer>
+
+</body>
+</html>

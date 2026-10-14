@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>多代理 vs 單代理：哪些工作真的比單代理好？｜深度研究</title>
+<meta name="description" content="繁體中文深度研究：從一則 X 討論題出發，盤點多代理 vs 單代理的正反實證、協調成本解剖、五問決策框架與任務分派範本。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">多單</span>
+    <span><span class="brand-name">多代理 vs 單代理</span><span class="brand-sub">RESEARCH DOSSIER · 2110116906581848217</span></span>
+  </a>
+  <nav class="site-nav">
+    <a href="index.html" aria-current="page">首頁</a>
+    <a href="evidence.html">證據盤點</a>
+    <a href="coordination-cost.html">協調成本</a>
+    <a href="decision-framework.html">決策框架</a>
+    <a href="templates.html">範本</a>
+    <a href="references.html">參考資料</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero hero-grid">
+    <div class="reveal">
+      <span class="kicker">討論題・非定論・深度研究</span>
+      <h1 class="title">哪些工作<br><span class="hi">多代理</span>真的比<span class="ho">單代理</span>好？</h1>
+      <p class="deck">
+        一則 X 貼文向全網徵求「agent swarm 做得到、單一 agent 做不到」的案例。
+        本站把這場討論升級成可學習的研究材料：證據盤點、成本解剖、決策評分表與可直接套用的範本。
+      </p>
+      <p class="deck" style="font-size:.86rem;color:var(--ink-3)">
+        議題來源：<a href="https://x.com/i/web/status/2110116906581848217">X 貼文 #2110116906581848217</a>（Martin @cantcomputer · 2026-10-13）
+        —— 作者公開徵求反例，<strong>討論中，尚無定論</strong>。
+      </p>
+    </div>
+
+    <div class="tweetcard reveal">
+      <div class="tweet-meta"><span class="tweet-who">Martin · @cantcomputer</span><span>2026-10-13 21:14 UTC</span></div>
+      <div class="tweet-body">
+        “Please show me something you've built with an agent swarm that <em>couldn't have been done just as effectively by a single agent</em>.”
+        <br><br>
+        “You don't have 200x the compute. You have the same usage limits, now with 200 agents competing for them and burning tokens coordinating with each other.”
+      </div>
+      <div class="tweet-stats"><span><b>159</b> likes</span><span><b>67</b> replies</span><span><b>7,563</b> views</span></div>
+    </div>
+  </section>
+
+  <!-- STAT BAND -->
+  <section class="statband reveal">
+    <div class="stat">
+      <div class="num">+90.2%</div>
+      <span class="lbl">ANTHROPIC 內部評測</span>
+      <div class="desc">廣度型研究任務，多代理勝單一 Opus 4（生產系統評測）</div>
+    </div>
+    <div class="stat">
+      <div class="num teal">−70%</div>
+      <span class="lbl">NATURE MI 2026 · 規劃任務</span>
+      <div class="desc">PlanCraft 上多代理全面變差（−39% ~ −70%）</div>
+    </div>
+    <div class="stat">
+      <div class="num">15×</div>
+      <span class="lbl">TOKEN 成本</span>
+      <div class="desc">多代理系統的 token 消耗約為一般聊天的 15 倍</div>
+    </div>
+    <div class="stat">
+      <div class="num teal">≈0</div>
+      <span class="lbl">同預算控制後</span>
+      <div class="desc">控制思考 token 相同，多代理在多跳推理的優勢消失</div>
+    </div>
+  </section>
+
+  <!-- TLDR -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 00</span><h2>核心結論（誠實版）</h2><span class="tail">TL;DR</span></div>
+
+    <div class="callout warn">
+      <span class="tag">這題是討論，不是結論</span>
+      <p>原貼文是<strong>徵求案例</strong>：作者要的是「單代理絕對做不到、且不是因為單代理沒被給足 token」的可量測案例。截至撰寫時，討論串（67 則回覆）尚未有人交出符合此標準的證據鏈。本站整理的是「現有研究能支持到什麼程度」。</p>
+    </div>
+
+    <div class="vs">
+      <div class="col multi">
+        <h4>多代理真正贏的條件（要同時成立）</h4>
+        <ul>
+          <li>分支<strong>真正獨立</strong>：不需要即時共享狀態</li>
+          <li>輸出可<strong>低成本匯總</strong>、可獨立驗收</li>
+          <li>資料量<strong>超過單一 context</strong>，必須分載</li>
+          <li>任務價值<strong>付得起 10–15× token</strong></li>
+        </ul>
+        <p style="font-size:.86rem;color:var(--ink-2)">→ 對應象限：廣度型研究、海量平行資料蒐集（Finance Agent +57~+81%）</p>
+      </div>
+      <div class="col single">
+        <h4>單代理贏的形狀</h4>
+        <ul>
+          <li>任務有<strong>強序列依賴</strong>（規劃、長程寫碼）</li>
+          <li>分支需要<strong>共享上下文與狀態</strong></li>
+          <li>受<strong>共享 rate limit</strong> 節制（Discord API、單一訂閱額度）</li>
+          <li>單一 context <strong>裝得下</strong>全部工作集</li>
+        </ul>
+        <p style="font-size:.86rem;color:var(--ink-2)">→ 對應象限：Discord 任務分派、SWE-bench、PlanCraft</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="tag">一句話</span>
+      <p style="font-family:var(--serif);font-size:1.08rem"><strong>多代理不是「更聰明」，是「花更多 token 換更寬的探索」；值不值得，取決於任務的形狀與單價。</strong></p>
+    </div>
+  </section>
+
+  <!-- INDEX -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 目錄</span><h2>學習路線</h2><span class="tail">5 STEPS</span></div>
+    <ol class="index">
+      <li><a href="evidence.html"><span class="t">證據盤點：正反兩方的實證研究<span class="d">11 項證據、標註 A/B/C 證據等級、跨領域對照表</span></span><span class="arrow">→</span></a></li>
+      <li><a href="coordination-cost.html"><span class="t">協調成本解剖：平行處理的收益去哪了<span class="d">token、rate limit、上下文割裂、同步瓶頸四種成本的算法</span></span><span class="arrow">→</span></a></li>
+      <li><a href="decision-framework.html"><span class="t">決策框架：五問評分表<span class="d">互動式計分，含 Discord 任務分派的完整計算範例</span></span><span class="arrow">→</span></a></li>
+      <li><a href="templates.html"><span class="t">範本：三種架構的 Prompt 與程式碼<span class="d">單代理、主管–工人、扇出閘門（Python）可直接複製</span></span><span class="arrow">→</span></a></li>
+      <li><a href="references.html"><span class="t">參考資料<span class="d">全部來源、連結與證據等級</span></span><span class="arrow">→</span></a></li>
+    </ol>
+    <p style="font-size:.85rem;color:var(--ink-3)">Markdown 學習資料（可離線閱讀／做筆記）存放在 GitHub repo 的 <code class="inline">docs/</code> 目錄：<a href="https://github.com/tboydar/multi-agent-vs-single-agent-zh/tree/main/docs">github.com/tboydar/multi-agent-vs-single-agent-zh/docs</a></p>
+  </section>
+
+  <!-- Discord preview -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 案例</span><h2>先看結論：Discord 任務分派要不要開代理群？</h2><span class="tail">WORKED EXAMPLE</span></div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>評分項</th><th class="num">得分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>Q1 分支獨立性</td><td class="num">1</td><td>伺服器成員狀態、權限、訊息脈絡是共享的</td></tr>
+          <tr><td>Q2 可驗收性</td><td class="num">1</td><td>可驗收，但需單一審核步驟</td></tr>
+          <tr><td>Q3 Context 壓力</td><td class="num">0</td><td>日常事件流遠小於 context 上限</td></tr>
+          <tr><td>Q4 任務價值</td><td class="num">1</td><td>例行營運，價值中等</td></tr>
+          <tr><td>Q5 共享瓶頸</td><td class="num">0</td><td>Discord API rate limit 是全體共享的</td></tr>
+          <tr><td><strong>總分</strong></td><td class="num win">3 / 10</td><td><strong>→ 單代理 + 工具 + 佇列</strong>（0–3 分區間）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="figcap">完整計算過程與例外情境 → <a href="decision-framework.html">決策框架</a></p>
+    <div class="callout good">
+      <span class="tag">為什麼</span>
+      <p>開 200 個 agent 只會讓所有分支去搶同一份 Discord API rate limit——正是原貼文嘲諷的「附帶限流器的分散式失業模擬器」。<strong>在共享瓶頸下，排隊不是缺點，是正確做法。</strong>只有當任務變成「50 個頻道各整理一份摘要」這種可獨立扇出的形狀時，才升級成 3–5 個 subagent。</p>
+    </div>
+  </section>
+
+  <div class="prevnext">
+    <span></span>
+    <a href="evidence.html">下一步：證據盤點 →</a>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <span>MULTI-AGENT VS SINGLE-AGENT · 繁體中文深度研究</span>
+  <span><a href="https://github.com/tboydar/multi-agent-vs-single-agent-zh">GitHub Repo</a> · MIT License · 資料來源見 <a href="references.html">參考資料</a></span>
+</footer>
+
+</body>
+</html>

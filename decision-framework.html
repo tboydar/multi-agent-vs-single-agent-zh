@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>決策框架：五問評分表（互動式）｜多代理 vs 單代理</title>
+<meta name="description" content="五問評分表 + 兩條一票否決：量化判斷任務該用單代理、best-of-n、主管–工人還是平行扇出。含 Discord 任務分派範例。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">多單</span>
+    <span><span class="brand-name">多代理 vs 單代理</span><span class="brand-sub">RESEARCH DOSSIER · 2110116906581848217</span></span>
+  </a>
+  <nav class="site-nav">
+    <a href="index.html">首頁</a>
+    <a href="evidence.html">證據盤點</a>
+    <a href="coordination-cost.html">協調成本</a>
+    <a href="decision-framework.html" aria-current="page">決策框架</a>
+    <a href="templates.html">範本</a>
+    <a href="references.html">參考資料</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="pagehead">
+    <span class="kicker">§ 03 · DECISION FRAMEWORK</span>
+    <h1>決策框架：五問評分表</h1>
+    <p>討論串吵不出結果的主因，是雙方沒有共同判準。這張表把「協調成本的五個條件」變成可打分的工具——<strong>動手點下面的分數，即時得到架構建議</strong>。</p>
+  </div>
+
+  <!-- interactive score -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 03A</span><h2>互動評分表</h2><span class="tail">0–10 POINTS</span></div>
+
+    <div class="scorebox" id="scorebox">
+      <div class="score-q" data-q="q1">
+        <div class="qtxt"><strong>Q1｜分支獨立性</strong><span>各分支需要即時共享狀態嗎？</span></div>
+        <div class="seg"><button data-v="0">0 同步協作</button><button data-v="1">1 偶爾查狀態</button><button data-v="2">2 完全獨立</button></div>
+      </div>
+      <div class="score-q" data-q="q2">
+        <div class="qtxt"><strong>Q2｜可驗收性</strong><span>分支輸出能被獨立檢查、低成本匯總嗎？</span></div>
+        <div class="seg"><button data-v="0">0 無法判斷</button><button data-v="1">1 要人工審</button><button data-v="2">2 自動驗收</button></div>
+      </div>
+      <div class="score-q" data-q="q3">
+        <div class="qtxt"><strong>Q3｜Context 壓力</strong><span>任務資料量會撐爆單一上下文嗎？</span></div>
+        <div class="seg"><button data-v="0">0 綽綽有餘</button><button data-v="1">1 接近上限</button><button data-v="2">2 明確超過</button></div>
+      </div>
+      <div class="score-q" data-q="q4">
+        <div class="qtxt"><strong>Q4｜任務價值</strong><span>產出價值付得起 10–15× token 嗎？</span></div>
+        <div class="seg"><button data-v="0">0 例行低價值</button><button data-v="1">1 中等價值</button><button data-v="2">2 高價值可計價</button></div>
+      </div>
+      <div class="score-q" data-q="q5">
+        <div class="qtxt"><strong>Q5｜共享瓶頸</strong><span>是否受共享 rate limit / 單一狀態源節制？</span></div>
+        <div class="seg"><button data-v="0">0 強共享瓶頸</button><button data-v="1">1 部分共享</button><button data-v="2">2 無瓶頸</button></div>
+      </div>
+      <div class="score-result">
+        <div class="score-total"><span id="total">0</span><small> / 10</small></div>
+        <div class="score-verdict" id="verdict"><span class="badge">建議</span>請先點選各題分數</div>
+        <div class="score-note" id="note">兩條一票否決：① Q1＝0（分支必須同步協作）→ 無論總分一律單代理；② Q5＝0 且 Q4≤1（搶額度且價值低）→ 放大排隊痛苦，收益為負。</div>
+      </div>
+    </div>
+
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th class="num">總分</th><th>建議架構</th><th>說明</th></tr></thead>
+        <tbody>
+          <tr><td class="num">0–3</td><td><strong>單代理 + 工具/工作流</strong></td><td>先用最簡單的形狀；佇列解決排隊</td></tr>
+          <tr><td class="num">4–6</td><td><strong>單代理 + 抽查式平行</strong>（best-of-n）</td><td>同題取樣投票，不做任務分工，規避交接成本</td></tr>
+          <tr><td class="num">7–8</td><td><strong>主管–工人（2–4 agents）</strong></td><td>僅 Q1、Q2 皆滿分時啟用；分支數從小開始</td></tr>
+          <tr><td class="num">9–10</td><td><strong>平行扇出（≥5 agents）</strong></td><td>Q3 也滿分才考慮；先驗證匯總端不是瓶頸</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- worked example -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 03B</span><h2>範例一：Discord 任務分派（原討論串場景）</h2><span class="tail">3 / 10</span></div>
+    <p class="lead">情境：社群 Discord 伺服器的 bot，收到成員請求後分派處理（回答 FAQ、排活動、審核貼文、匯出報表）。這正是「要不要開代理群」的典型爭論點。</p>
+
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>評分項</th><th class="num">得分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>Q1 分支獨立性</td><td class="num">1</td><td>同一伺服器的成員狀態、權限、訊息脈絡是共享的</td></tr>
+          <tr><td>Q2 可驗收性</td><td class="num">1</td><td>回答對錯要查，可由單一審核步驟處理</td></tr>
+          <tr><td>Q3 Context 壓力</td><td class="num">0</td><td>日常事件流遠小於 context 上限</td></tr>
+          <tr><td>Q4 任務價值</td><td class="num">1</td><td>例行營運，價值中等</td></tr>
+          <tr><td>Q5 共享瓶頸</td><td class="num">0</td><td>Discord API 有嚴格 rate limit，所有 agent 共用</td></tr>
+          <tr><td><strong>總分</strong></td><td class="num win">3 / 10</td><td><strong>→ 單代理 + 工具 + 佇列</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout good">
+      <span class="tag">結論</span>
+      <p>Discord 任務分派<strong>不需要代理群</strong>。正確做法：單一 agent + 明確工具集（read_messages、assign_role、create_event、export_report）+ 排隊佇列。開 200 個 agent 只會讓所有分支去搶同一份 Discord API rate limit——正是貼文嘲諷的「附帶限流器的分散式失業模擬器」。</p>
+      <p><strong>例外（升級門檻）</strong>：「把過去 50 個頻道的討論各整理成一份摘要」→ Q1＝2、Q3＝2、Q2＝2，總分足以開 3–5 個 subagent 扇出。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 03C</span><h2>範例二：廣度型研究（對照組）</h2><span class="tail">10 / 10</span></div>
+    <p class="lead">情境：「調查 200 家公司的供應商並比較」。</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>評分項</th><th class="num">得分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>Q1 分支獨立</td><td class="num">2</td><td>每家公司一組，互不依賴</td></tr>
+          <tr><td>Q2 可驗收</td><td class="num">2</td><td>每組回傳結構化欄位，機器可合併</td></tr>
+          <tr><td>Q3 Context</td><td class="num">2</td><td>200 家的原始資料超過單一 context</td></tr>
+          <tr><td>Q4 價值</td><td class="num">2</td><td>投資／採購決策，高價值</td></tr>
+          <tr><td>Q5 瓶頸</td><td class="num">2</td><td>公開網路查詢，無強共享瓶頸</td></tr>
+          <tr><td><strong>總分</strong></td><td class="num win">10 / 10</td><td><strong>→ 平行扇出</strong>（這就是 +90.2% 所處的象限）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 03D</span><h2>上線前的驗證清單</h2><span class="tail">PRE-FLIGHT</span></div>
+    <ol style="font-size:.95rem">
+      <li>先寫 <strong>20 條代表性的測試題</strong>（小型 eval 足以看到改動效果）。</li>
+      <li><strong>單代理基線先跑分</strong>——沒有基線的多代理 demo 不算證據。</li>
+      <li>對照時<strong>控制 token 預算</strong>：允許多代理多花 15× 就要明說，另外報告「同預算比較」。</li>
+      <li>記錄三項帳：<code class="inline">總 token</code>、<code class="inline">P95 延遲</code>、<code class="inline">失敗重試次數</code>。</li>
+      <li>模型升級、任務量級變化、rate limit 政策調整時<strong>重新評分</strong>。</li>
+    </ol>
+    <div class="callout">
+      <span class="tag">PR 描述一行版</span>
+      <pre style="margin:.4rem 0 0;box-shadow:none">本功能架構：&lt;單代理 / best-of-n / 主管-工人 / 扇出&gt;
+五問評分：&lt;Q1..Q5&gt; = &lt;總分&gt;
+單代理基線：&lt;有/無，分數 __&gt;
+預計 token 倍數：&lt;1× / 4× / ~15×&gt;
+否決條件是否觸發：&lt;是/否&gt;</pre>
+    </div>
+  </section>
+
+  <div class="prevnext">
+    <a href="coordination-cost.html">← 協調成本解剖</a>
+    <a href="templates.html">下一步：範本 →</a>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <span>MULTI-AGENT VS SINGLE-AGENT · 繁體中文深度研究</span>
+  <span><a href="https://github.com/tboydar/multi-agent-vs-single-agent-zh">GitHub Repo</a> · MIT License · <a href="references.html">參考資料</a></span>
+</footer>
+
+<script>
+(function () {
+  var state = { q1: 0, q2: 0, q3: 0, q4: 0, q5: 0 };
+  var box = document.getElementById('scorebox');
+
+  function verdict() {
+    var s = state.q1 + state.q2 + state.q3 + state.q4 + state.q5;
+    document.getElementById('total').textContent = s;
+    var v = document.getElementById('verdict');
+    var note = document.getElementById('note');
+    var veto = '';
+    if (state.q1 === 0) veto = 'VETO ①：Q1＝0（分支必須同步協作）→ 無論總分一律單代理。';
+    else if (state.q5 === 0 && state.q4 <= 1) veto = 'VETO ②：Q5＝0 且 Q4≤1（搶額度且價值低）→ 排隊痛苦放大，收益為負。';
+
+    if (veto) {
+      v.innerHTML = '<span class="badge">一票否決</span>單代理 + 工具/工作流';
+      note.textContent = veto;
+      return;
+    }
+    if (s <= 3) v.innerHTML = '<span class="badge">建議</span>單代理 + 工具/工作流（先用最簡單的形狀）';
+    else if (s <= 6) v.innerHTML = '<span class="badge">建議</span>單代理 + 抽查式平行（best-of-n，不做任務分工）';
+    else if (s <= 8) v.innerHTML = '<span class="badge">建議</span>主管–工人（2–4 agents，僅 Q1、Q2 皆滿分時）';
+    else v.innerHTML = '<span class="badge">建議</span>平行扇出（≥5 agents，先驗證匯總端不是瓶頸）';
+    note.textContent = '兩條一票否決：① Q1＝0（分支必須同步協作）→ 無論總分一律單代理；② Q5＝0 且 Q4≤1（搶額度且價值低）→ 放大排隊痛苦，收益為負。';
+  }
+
+  box.querySelectorAll('.score-q').forEach(function (row) {
+    var key = row.getAttribute('data-q');
+    row.querySelectorAll('.seg button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        row.querySelectorAll('.seg button').forEach(function (b) { b.classList.remove('on'); });
+        btn.classList.add('on');
+        state[key] = parseInt(btn.getAttribute('data-v'), 10);
+        verdict();
+      });
+    });
+  });
+
+  // 預設載入 Discord 例子的分數
+  var preset = { q1: 1, q2: 1, q3: 0, q4: 1, q5: 0 };
+  Object.keys(preset).forEach(function (key) {
+    var row = box.querySelector('[data-q="' + key + '"]');
+    var btn = row.querySelector('.seg button[data-v="' + preset[key] + '"]');
+    btn.classList.add('on');
+    state[key] = preset[key];
+  });
+  verdict();
+})();
+</script>
+
+</body>
+</html>

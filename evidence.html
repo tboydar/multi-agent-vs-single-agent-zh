@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>證據盤點：多代理 vs 單代理的正反實證｜多代理 vs 單代理</title>
+<meta name="description" content="11 項正反實證證據，標註 A/B/C 證據等級：Anthropic +90.2%、Nature MI 跨領域對照、控制算力後優勢消失等。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">多單</span>
+    <span><span class="brand-name">多代理 vs 單代理</span><span class="brand-sub">RESEARCH DOSSIER · 2110116906581848217</span></span>
+  </a>
+  <nav class="site-nav">
+    <a href="index.html">首頁</a>
+    <a href="evidence.html" aria-current="page">證據盤點</a>
+    <a href="coordination-cost.html">協調成本</a>
+    <a href="decision-framework.html">決策框架</a>
+    <a href="templates.html">範本</a>
+    <a href="references.html">參考資料</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="pagehead">
+    <span class="kicker">§ 01 · EVIDENCE</span>
+    <h1>證據盤點：多代理到底什麼時候真的比單代理好？</h1>
+    <p>閱讀規則：先看證據等級，再看結論。<span class="grade gA">A</span>＝有控制變因的對照實驗 · <span class="grade gB">B</span>＝生產系統內部評測 · <span class="grade gC">C</span>＝案例或觀點。</p>
+  </div>
+
+  <!-- PRO -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 01A</span><h2>支持「多代理真的贏」</h2><span class="tail">PRO</span></div>
+
+    <div class="ev pro">
+      <div class="no">A1</div>
+      <div>
+        <h4>Anthropic Research 系統：+90.2%<span class="src">anthropic.com · 2025-06 · <span class="grade gB">B</span></span></h4>
+        <p>Lead Opus 4 + Sonnet 4 subagents 在其<strong>內部研究評測</strong>上比單一 Opus 4 高出 90.2%。任務形狀是「廣度優先」——例如列出 S&amp;P 500 資訊類股所有公司的董事，需同時追多條獨立線索，單代理的序列式搜尋來不及。</p>
+        <p>機制：多代理的本質是<strong>幫你把 token 花夠</strong>。BrowseComp 分析中 token 用量單獨解釋 80% 的表現變異（加工具次數與模型選擇合計 95%）。平行化讓複雜查詢時間最多縮短 90%。</p>
+        <p class="takeaway"><strong>同篇文章的警語：</strong>多代理 token 約為聊天 15×；「需要共享上下文或彼此依賴多的領域不適合」；「多數寫程式的可平行部分遠少於研究」；早期曾發生「簡單查詢就 spawn 50 個 subagent」的失控。</p>
+      </div>
+    </div>
+
+    <div class="ev pro">
+      <div class="no">A2</div>
+      <div>
+        <h4>Finance Agent：+57% ~ +81%<span class="src">Nature Machine Intelligence 2026 · <span class="grade gA">A</span></span></h4>
+        <p>跨架構對照中，Finance Agent 是多代理<strong>全面大勝</strong>的領域：所有多代理架構都大幅贏過單代理。任務形狀：可分解、平行、每個分支（不同標的、不同資料源）可獨立驗收。</p>
+        <p class="takeaway">這是「多代理勝出需要的條件同時成立」的最佳正面案例。</p>
+      </div>
+    </div>
+
+    <div class="ev pro">
+      <div class="no">A3</div>
+      <div>
+        <h4>抽樣式多代理（best-of-n）<span class="src">TMLR 2024 · <span class="grade gA">A</span></span></h4>
+        <p>「More Agents Is All You Need」：同一題平行抽樣多個答案再聚合，效能隨 agent 數提升。</p>
+        <p class="takeaway"><strong>但這是抽樣不是分工</strong>——沒有交接成本，常被拿來替「協調式 swarm」背書，屬於混用概念。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CON -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 01B</span><h2>支持「單代理更好／優勢被高估」</h2><span class="tail">CON</span></div>
+
+    <div class="ev con">
+      <div class="no">B1</div>
+      <div>
+        <h4>控制算力後，優勢蒸發<span class="src">arXiv 2604.02460 · <span class="grade gA">A</span></span></h4>
+        <p>控制<strong>思考 token 預算相同</strong>後，單代理在多跳推理任務上穩定追平或打贏多代理。資訊論論證：固定預算下單代理資訊效率更高。</p>
+        <p class="takeaway">許多報告的「多代理優勢」其實是<strong>沒被記帳的額外運算</strong>與基準測試假象——這正是 X 貼文的學術版：<em>“You don't have 200x the compute.”</em></p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">B2</div>
+      <div>
+        <h4>多代理辯論打不過便宜技巧<span class="src">arXiv 2311.17371 · <span class="grade gA">A</span></span></h4>
+        <p>系統性比較：多代理辯論（MAD）<strong>目前的形式無法可靠勝過</strong> self-consistency（同題多次投票）或 multi-path ensembling；且對超參數極敏感、難調優。</p>
+        <p class="takeaway">想提升正確率，先用便宜的抽樣投票，再考慮養 agent 群。</p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">B3</div>
+      <div>
+        <h4>失敗模式是系統性的（MAST）<span class="src">arXiv 2503.13657 · NeurIPS 2025 · <span class="grade gA">A</span></span></h4>
+        <p>1600+ 標註軌跡、7 個 MAS 框架，歸納 <strong>14 種失敗模式</strong>、3 大類：系統設計缺陷、agent 間失準、任務驗證不足。開宗明義：MAS 在熱門基準上的提升「通常很小」。</p>
+        <p class="takeaway">多代理把「一條軌跡的錯誤」變成「N 條軌跡的對帳問題」。</p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">B4</div>
+      <div>
+        <h4>模型越強，分身價值越小<span class="src">arXiv 2505.18286 · Gao et al. 2025 · <span class="grade gA">A</span></span></h4>
+        <p>廣泛實證：MAS 相對 SAS 的收益<strong>隨模型能力提升而遞減</strong>——長上下文、記憶、工具使用進步，把當年催生 MAS 的限制逐一補掉。提出的 hybrid 級聯：+1.1~12% 準確率、−20% 成本。</p>
+        <p class="takeaway">今天的架構決策要預留「模型升級後重新評估」的鉤子。</p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">B5</div>
+      <div>
+        <h4>跨領域對照：贏輸一樣清楚<span class="src">Nature MI 2026 · <span class="grade gA">A</span></span></h4>
+        <div class="tblwrap" style="box-shadow:none;margin:.7rem 0">
+          <table>
+            <thead><tr><th>任務</th><th>多代理 vs 單代理</th><th>任務形狀</th></tr></thead>
+            <tbody>
+              <tr><td>Finance Agent</td><td class="win">+57% ~ +81%</td><td>可分解、平行、可獨立驗收</td></tr>
+              <tr><td>Terminal-Bench</td><td class="num">+6% / −20%</td><td>工具少，協調不划算（集中式變差）</td></tr>
+              <tr><td>SWE-bench Verified</td><td class="lose">−1% ~ −13%</td><td>單代理基線已高、序列依賴重</td></tr>
+              <tr><td>PlanCraft（規劃）</td><td class="lose">−39% ~ −70%</td><td>嚴格序列依賴、動態狀態</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>附加發現：協調通訊量隨 agent 數<strong>超線性</strong>成長；3–4 個 agent 以上單分支推理品質明顯下滑；<strong>沒有任何異質中央化配置打贏同質強模型單代理基線</strong>；「高能力 sub-agent」比「高能力 orchestrator」划算。</p>
+      </div>
+    </div>
+
+    <div class="ev con">
+      <div class="no">B6</div>
+      <div>
+        <h4>生產實務派的反對<span class="src">Cognition · OpenHands · <span class="grade gC">C</span></span></h4>
+        <p><strong>Don't Build Multi-Agents</strong>（Cognition/Devin）：拆分給 subagent 會<strong>割裂共享上下文</strong>，subagent 看不到彼此決策，導致錯誤複製與狀態不一致；主張用 context engineering 維持單一長程 agent 的完整脈絡。</p>
+        <p><strong>Don't Sleep on Single-agent Systems</strong>（OpenHands）：多 agent 只是在 LLM、prompt、action space 三個變因上換組合，換來的是溝通成本；把一個 agent 變強比養一群弱 agent 有效。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYNTHESIS -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 01C</span><h2>綜合判讀：證據能支持到什麼程度？</h2><span class="tail">SYNTHESIS</span></div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th style="width:45%">說法</th><th>目前證據是否支持</th></tr></thead>
+        <tbody>
+          <tr><td>可真正平行、獨立分支、context 裝不下的任務，多代理有量化收益</td><td><strong class="win">✔ 支持</strong>（A1、A2、B5 正面行）</td></tr>
+          <tr><td>固定 token 預算下，多代理仍普遍更強</td><td><strong class="lose">✘ 不支持</strong>（B1、B2：優勢消失）</td></tr>
+          <tr><td>序列依賴、共享狀態的任務加 agent 會變好</td><td><strong class="lose">✘ 反證明確</strong>（B5、A1 警語、B6）</td></tr>
+          <tr><td>存在「單代理絕對做不到」的案例（原作者所求）</td><td><strong>？尚未有人交出</strong>可量測版本</td></tr>
+          <tr><td>模型越強，多代理的相對優勢越小</td><td><strong class="win">✔ 支持</strong>（B4）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn">
+      <span class="tag">給討論串的一句話</span>
+      <p>多代理不是「更聰明」，是「花更多 token 換更寬的探索」。原作者要的證據標準（排除算力差異後的純架構優勢）<strong>尚未被滿足</strong>——這就是為什麼它是討論題。</p>
+    </div>
+  </section>
+
+  <div class="prevnext">
+    <a href="index.html">← 首頁</a>
+    <a href="coordination-cost.html">下一步：協調成本解剖 →</a>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <span>MULTI-AGENT VS SINGLE-AGENT · 繁體中文深度研究</span>
+  <span><a href="https://github.com/tboydar/multi-agent-vs-single-agent-zh">GitHub Repo</a> · MIT License · <a href="references.html">參考資料</a></span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>範本：三種架構的 Prompt 與程式碼｜多代理 vs 單代理</title>
+<meta name="description" content="可直接複製的範本：單代理+工具（Discord 任務分派預設解）、主管–工人的委派與匯總 prompt、扇出閘門 Python 判定程式碼。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">多單</span>
+    <span><span class="brand-name">多代理 vs 單代理</span><span class="brand-sub">RESEARCH DOSSIER · 2110116906581848217</span></span>
+  </a>
+  <nav class="site-nav">
+    <a href="index.html">首頁</a>
+    <a href="evidence.html">證據盤點</a>
+    <a href="coordination-cost.html">協調成本</a>
+    <a href="decision-framework.html">決策框架</a>
+    <a href="templates.html" aria-current="page">範本</a>
+    <a href="references.html">參考資料</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="pagehead">
+    <span class="kicker">§ 04 · TEMPLATES</span>
+    <h1>範本：三種架構可直接複製</h1>
+    <p>依評分結果選一個形狀。所有 prompt 遵循 Anthropic 的委派原則：<strong>給目標、給邊界、給格式、給預算、給完成條件</strong>。</p>
+  </div>
+
+  <!-- Template A -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">範本 A</span><h2>單代理 + 工具（Discord 任務分派的預設解）</h2><span class="tail">SCORE 0–3</span></div>
+<pre>Discord event → 佇列(queue) → [<span class="s">單一 Agent</span>] → tools → 回應</pre>
+    <p class="figcap">評分依據：Q1=1、Q3=0、Q5=0（見決策框架）。佇列天然解決「多 agent 搶額度」——<strong>排隊不是缺點，是共享瓶頸下的正確做法</strong>。</p>
+
+    <h3 class="sub">System Prompt 範本</h3>
+<pre><span class="c">你是「伺服器任務代理」，負責一個 Discord 伺服器的日常任務分派與執行。</span>
+
+<span class="k">規則：</span>
+1. 一次只處理佇列中的一個任務；處理完成才取下一個。
+2. 先判斷任務類型，再選擇對應工具，禁止一次呼叫多個寫入工具：
+   - FAQ/問題   → search_kb + reply
+   - 活動安排   → read_schedule + create_event
+   - 審核       → read_context + moderate（需人工確認的項目一律回報）
+   - 報表       → export_report（&gt;30s 的工作改回「已排入背景任務」）
+3. 你沒有其他 agent 夥伴；遇到需要多方向調查的任務，
+   依〈扇出規則〉請求開 subagent（見範本 C 的門檻）。
+4. 所有外部呼叫受同一份 Discord API rate limit 節制：呼叫前先檢查
+   冷卻時間，撞到 429 就退避重試，<span class="k">不要平行重試</span>。
+5. 輸出一律為 JSON：{task_id, status, tool_calls, result, needs_human}</pre>
+  </section>
+
+  <!-- Template B -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">範本 B</span><h2>主管–工人（僅在評分 ≥7 時使用）</h2><span class="tail">2–4 AGENTS</span></div>
+<pre>queue → [<span class="k">Lead Agent 分派</span>] ─┬─ [Worker 1] ─┐
+                              ├─ [Worker 2] ─┼→ [<span class="k">Lead 匯總/驗收</span>] → 回應
+                              └─ [Worker 3] ─┘</pre>
+
+    <h3 class="sub">委派 prompt（教會 orchestrator 如何分派）</h3>
+<pre><span class="k">【分派格式】每次委派必須給 subagent 以下五欄，缺一不可：</span>
+1. Objective   : 單一、明確的目標句（一個分支只准有一個目標）
+2. Scope       : 明確邊界（「只調查 X，不包含 Y」——避免分支互相重疊）
+3. Output schema: 回傳欄位與格式（讓匯總端可機器合併）
+4. Budget      : 最多 N 次工具呼叫 / M token，超過就回傳目前結論
+5. Done criteria: 什麼狀態算完成（防止無止境搜尋）
+
+<span class="k">【規模規則】</span>
+- 簡單事實查找 → 1 個 agent、3–10 次工具呼叫（<span class="s">不要開分支</span>）
+- 一般比較題   → 2–4 個 subagent，各 10–15 次呼叫
+- 複雜廣度調查 → 才考慮 &gt;10 個 subagent，且必須先通過五問評分表</pre>
+
+    <h3 class="sub">匯總端驗收 prompt</h3>
+<pre><span class="k">你是匯總者。收到各分支回報後：</span>
+1. 依 Output schema 合併；
+2. 檢查覆蓋率：每個 Objective 是否都有 Done criteria 的證據？缺漏列清單；
+3. 有缺漏 → 最多重試 1 輪補查；仍缺 → 標記 needs_human，<span class="k">不要自己編</span>。
+4. 回傳：{merged_result, gaps[], token_spend, branches_used}</pre>
+  </section>
+
+  <!-- Template C -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">範本 C</span><h2>扇出閘門（防呆：一行判斷要不要開多代理）</h2><span class="tail">PYTHON</span></div>
+<pre><span class="k">def</span> should_fan_out(task, ctx) -&gt; dict:
+    score = 0
+    <span class="c"># Q1: 分支可獨立執行（不需要彼此即時同步）</span>
+    score += 2 <span class="k">if</span> task.independent_branches <span class="k">else</span> (1 <span class="k">if</span> task.loose_coupling <span class="k">else</span> 0)
+    <span class="c"># Q2: 分支輸出可自動驗收、低成本匯總</span>
+    score += 2 <span class="k">if</span> task.auto_verifiable <span class="k">else</span> (1 <span class="k">if</span> task.human_reviewable <span class="k">else</span> 0)
+    <span class="c"># Q3: 資料量超過單一 context</span>
+    score += 2 <span class="k">if</span> task.exceeds_single_context <span class="k">else</span> (1 <span class="k">if</span> task.near_limit <span class="k">else</span> 0)
+    <span class="c"># Q4: 任務價值付得起 10-15x token</span>
+    score += 2 <span class="k">if</span> task.value_tier == <span class="s">"high"</span> <span class="k">else</span> (1 <span class="k">if</span> task.value_tier == <span class="s">"mid"</span> <span class="k">else</span> 0)
+    <span class="c"># Q5: 無共享 rate limit / 單一狀態源瓶頸</span>
+    score += 2 <span class="k">if not</span> task.shared_quota <span class="k">else</span> (1 <span class="k">if</span> task.quota_headroom <span class="k">else</span> 0)
+
+    <span class="c"># 一票否決</span>
+    <span class="k">if not</span> task.independent_branches:
+        <span class="k">return</span> {<span class="s">"fan_out"</span>: False, <span class="s">"reason"</span>: <span class="s">"Q1=0: 需同步協作"</span>}
+    <span class="k">if</span> task.shared_quota <span class="k">and</span> task.value_tier == <span class="s">"low"</span>:
+        <span class="k">return</span> {<span class="s">"fan_out"</span>: False, <span class="s">"reason"</span>: <span class="s">"Q5+Q4: 搶額度且價值低"</span>}
+
+    <span class="k">if</span> score &lt;= 3: <span class="k">return</span> {<span class="s">"fan_out"</span>: False, <span class="s">"agents"</span>: 1, <span class="s">"score"</span>: score}
+    <span class="k">if</span> score &lt;= 6: <span class="k">return</span> {<span class="s">"fan_out"</span>: False, <span class="s">"mode"</span>: <span class="s">"best_of_n"</span>, <span class="s">"n"</span>: 3, <span class="s">"score"</span>: score}
+    <span class="k">if</span> score &lt;= 8: <span class="k">return</span> {<span class="s">"fan_out"</span>: True, <span class="s">"agents"</span>: min(4, task.branch_count), <span class="s">"score"</span>: score}
+    <span class="k">return</span> {<span class="s">"fan_out"</span>: True, <span class="s">"agents"</span>: task.branch_count, <span class="s">"score"</span>: score}</pre>
+    <div class="callout warn">
+      <span class="tag">分支數硬上限</span>
+      <p><strong>先從 2–4 個開始。</strong>Nature 2026 觀察到 3–4 個 agent 以上單分支推理品質開始下滑、通訊量超線性成長；「200 agents」在任何評分下都沒有實證支持。任何 demo 都要附「單代理基線 + 同預算比較」才算數。</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 04D</span><h2>範本怎麼選（速查）</h2><span class="tail">QUICK PICK</span></div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>你的評分</th><th>拿哪個範本</th><th>第一步</th></tr></thead>
+        <tbody>
+          <tr><td class="num">0–3（含 Discord 分派）</td><td>範本 A</td><td>把工具定義寫清楚 + 佇列化</td></tr>
+          <tr><td class="num">4–6</td><td>範本 A + best-of-n</td><td>同題跑 3 次取最佳，不做分工</td></tr>
+          <tr><td class="num">7–8</td><td>範本 B</td><td>先跑單代理基線，再上 2 個 worker 對照</td></tr>
+          <tr><td class="num">9–10</td><td>範本 B + C 閘門</td><td>接上 should_fan_out，記錄三項帳</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="prevnext">
+    <a href="decision-framework.html">← 決策框架</a>
+    <a href="references.html">下一步：參考資料 →</a>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <span>MULTI-AGENT VS SINGLE-AGENT · 繁體中文深度研究</span>
+  <span><a href="https://github.com/tboydar/multi-agent-vs-single-agent-zh">GitHub Repo</a> · MIT License · <a href="references.html">參考資料</a></span>
+</footer>
+
+</body>
+</html>

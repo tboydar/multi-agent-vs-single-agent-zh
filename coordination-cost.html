@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>協調成本解剖：平行處理的收益去哪了｜多代理 vs 單代理</title>
+<meta name="description" content="四種協調成本（token、rate limit、上下文割裂、同步瓶頸）的解剖，與平行收益成立的五個條件。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">多單</span>
+    <span><span class="brand-name">多代理 vs 單代理</span><span class="brand-sub">RESEARCH DOSSIER · 2110116906581848217</span></span>
+  </a>
+  <nav class="site-nav">
+    <a href="index.html">首頁</a>
+    <a href="evidence.html">證據盤點</a>
+    <a href="coordination-cost.html" aria-current="page">協調成本</a>
+    <a href="decision-framework.html">決策框架</a>
+    <a href="templates.html">範本</a>
+    <a href="references.html">參考資料</a>
+  </nav>
+</header>
+
+<main class="wrap">
+
+  <div class="pagehead">
+    <span class="kicker">§ 02 · COORDINATION COST</span>
+    <h1>協調成本解剖：<br>平行處理的收益去哪了？</h1>
+    <p>那則 X 貼文的技術核心只有一句：<strong>平行化不會增加你的預算，只會增加你的開銷。</strong>本頁把「開銷」拆開算給你看。</p>
+  </div>
+
+  <!-- four costs -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 02A</span><h2>四種協調成本</h2><span class="tail">4 COSTS</span></div>
+
+    <div class="cost-grid">
+      <div class="cost">
+        <span class="ci">COST 01 · TOKEN</span>
+        <h4>Token 成本</h4>
+        <p>一般聊天 1× → 單一 agent ~4× → <strong>多代理 ~15×</strong>（Anthropic 生產數據）。多出來的不是工作，是任務描述、狀態回報、中間轉述、匯總重試。</p>
+        <p>分支輸出小、交接對話長時，<strong>交接成本可能大於工作本身</strong>。</p>
+        <div class="meter"><i style="width:100%"></i></div>
+      </div>
+      <div class="cost">
+        <span class="ci">COST 02 · RATE LIMIT</span>
+        <h4>用量上限</h4>
+        <p>所有 agent 共享同一份訂閱額度與 API 限流。200 個 agent 不是 200 倍算力，是<strong>同一條水管被切成 200 股</strong>。</p>
+        <p>瓶頸從「想不完」變成「集體排隊」；一個分支撞限流，匯總端全體等待。</p>
+        <div class="meter"><i style="width:85%"></i></div>
+      </div>
+      <div class="cost">
+        <span class="ci">COST 03 · CONTEXT</span>
+        <h4>上下文割裂</h4>
+        <p>subagent 彼此看不到決策，只能透過「任務描述」這條窄管溝通；描述寫得含糊 → 重複工作、漏東漏西。</p>
+        <p>匯總端只拿到<strong>被壓縮兩次的結論</strong>，原始脈絡已丟失。</p>
+        <div class="meter"><i style="width:70%"></i></div>
+      </div>
+      <div class="cost">
+        <span class="ci">COST 04 · SYNC &amp; VERIFY</span>
+        <h4>同步與驗證</h4>
+        <p>同步匯總：一個慢分支拖住全隊（Anthropic 的 lead agent 同步等待每批 subagent）。</p>
+        <p>驗證責任轉移：要先分辨哪條軌跡錯了；補查重試使成本<strong>非線性放大</strong>。</p>
+        <div class="meter"><i style="width:60%"></i></div>
+      </div>
+    </div>
+    <p class="figcap">相對嚴重度為教學示意，實際比例依任務而異；token 倍數為 Anthropic 公布的生產數據。</p>
+  </section>
+
+  <!-- formula -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 02B</span><h2>收益什麼時候蓋過成本？</h2><span class="tail">FIVE CONDITIONS</span></div>
+
+<pre><span class="c"># 多代理成本速算</span>
+多代理總成本 ≈ Σ(各分支獨立工作 token) + 交接 token × 分支數²
+                     <span class="k">↑ 實際收益來自這裡</span>        <span class="k">↑ 協調稅，隨分支數快速長大</span>
+
+<span class="c"># 平行收益成立，需要同時滿足（缺一容易翻車）</span>
+1. 分支真正獨立（不需即時交換狀態）
+2. 分支數 × 單分支工作量 &gt; 交接成本   <span class="c"># 小任務開分支是負資產</span>
+3. 匯總便宜（N 份結論合成 1 份 &lt; 重做一遍）
+4. 資料量超過單一 context             <span class="c"># 多 context 是為了「裝更多」不是「更聰明」</span>
+5. 任務價值付得起 10–15× token        <span class="c"># Anthropic: economic viability</span>
+</pre>
+
+    <div class="callout warn">
+      <span class="tag">quota-bound vs latency-bound</span>
+      <p>如果你的系統受<strong>固定額度</strong>限制（quota-bound）而非受思考時間限制，增加 agent 數通常只會把等待從「串行」變成「擁塞」。X 貼文的 200 agents 就是 quota-bound 系統硬加平行的反例。</p>
+    </div>
+  </section>
+
+  <!-- mental model -->
+  <section class="sec">
+    <div class="sec-head"><span class="sec-no">§ 02C</span><h2>心智模型：兩種系統的瓶頸位置</h2><span class="tail">DIAGRAM</span></div>
+
+<pre>單代理：  [思考→行動→思考→行動] ...... → 結果
+          成本 = <span class="s">工作本身</span>；瓶頸 = <span class="k">速度（序列）</span>
+
+多代理：  [主管 分派]
+            ├─ [agent A 獨立工作] ─┐
+            ├─ [agent B 獨立工作] ─┼─ [匯總] → 結果
+            └─ [agent C 獨立工作] ─┘
+          成本 = <span class="s">工作本身 + 分派 + 交接 + 匯總 + 排隊</span>
+          瓶頸 = <span class="k">匯總端 + 共享額度</span>
+
+→ 分支<strong>獨立且夠肥</strong>：成本差距被時間／覆蓋率補回來
+→ 分支<strong>互相依賴或很瘦</strong>：協調稅直接吃掉全部收益</pre>
+
+    <div class="vs">
+      <div class="col multi">
+        <h4>對應到 X 貼文</h4>
+        <ul>
+          <li>「200 agents competing for usage limits」＝ COST 02</li>
+          <li>「burning tokens coordinating」＝ COST 01 + 04</li>
+          <li>作者要的案例 = 右欄五條件同時成立、且排除算力差異</li>
+        </ul>
+      </div>
+      <div class="col single">
+        <h4>反過來，什麼情況下該用多代理</h4>
+        <ul>
+          <li>200 家公司的平行調查（context 裝不下）</li>
+          <li>多來源的新聞／輿情廣度掃描（分支獨立）</li>
+          <li>每分支可回傳結構化欄位、機器可合併（匯總便宜）</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="prevnext">
+    <a href="evidence.html">← 證據盤點</a>
+    <a href="decision-framework.html">下一步：決策框架 →</a>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <span>MULTI-AGENT VS SINGLE-AGENT · 繁體中文深度研究</span>
+  <span><a href="https://github.com/tboydar/multi-agent-vs-single-agent-zh">GitHub Repo</a> · MIT License · <a href="references.html">參考資料</a></span>
+</footer>
+
+</body>
+</html>
